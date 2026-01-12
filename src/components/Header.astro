@@ -4,8 +4,13 @@ import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import { SITE } from "@consts";
 
-const blog = (await getCollection("blog")).filter(post => !post.data.draft);
-const hasBlogPosts = blog.length > 0;
+let hasBlogPosts = false;
+try {
+  const blog = await getCollection("blog");
+  hasBlogPosts = blog.filter(post => !post.data.draft).length > 0;
+} catch {
+  hasBlogPosts = false;
+}
 ---
 
 <header>
