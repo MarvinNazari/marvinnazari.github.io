@@ -37,9 +37,3 @@ const workout = build()
   .step('5m', { power: '50%' })
   .toString();
 ```
-
-## Tech Stack
-
-- TypeScript
-- Vitest for testing
-- tsup for bundling
