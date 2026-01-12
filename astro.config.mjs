@@ -4,6 +4,6 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  site: "https://marvinnazari.github.io",
+  site: "https://wavio.co",
   integrations: [mdx(), sitemap(), tailwind()],
 });
