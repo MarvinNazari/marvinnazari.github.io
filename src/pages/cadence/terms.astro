@@ -1,0 +1,17 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import { Content } from "./_terms.md";
+---
+
+<PageLayout title="Cadence terms of use" description="The terms for using Cadence, an iPhone app for your intervals.icu training.">
+  <Container>
+    <div class="space-y-6">
+      <div class="animate text-sm"><a href="/cadence/">← Cadence</a></div>
+      <h1 class="animate font-semibold text-black dark:text-white text-2xl">Cadence terms of use</h1>
+      <article class="animate">
+        <Content />
+      </article>
+    </div>
+  </Container>
+</PageLayout>

@@ -1,0 +1,27 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+---
+
+<PageLayout title="Cadence" description="Cadence is an iPhone app for your intervals.icu training: your week, your plan, your activities and how your fitness is going.">
+  <Container>
+    <article class="space-y-10">
+      <div class="space-y-3">
+        <h1 class="animate font-semibold text-black dark:text-white text-2xl not-prose">Cadence</h1>
+        <p class="animate">An iPhone app for your <a href="https://intervals.icu">intervals.icu</a> training: your week, your plan, your activities and how your fitness is going. Cadence talks to your intervals.icu account directly from your iPhone; there is no Cadence account and no server in between.</p>
+        <p class="animate text-sm opacity-75">Cadence is in beta on TestFlight. It is an independent app, not made by intervals.icu.</p>
+      </div>
+      <section class="animate space-y-3">
+        <h2 class="font-semibold text-black dark:text-white">Support</h2>
+        <p>Found a bug or have an idea? Email <a href="mailto:cadence@wavio.co?subject=Cadence%20feedback">cadence@wavio.co</a>, or use Send feedback in the app's Profile tab, which fills in your app and iOS version for you. For a bug, say what you did, what you expected and what happened; a screenshot helps.</p>
+      </section>
+      <section class="animate space-y-3">
+        <h2 class="font-semibold text-black dark:text-white">Legal</h2>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><a href="/cadence/privacy/">Privacy policy</a></li>
+          <li><a href="/cadence/terms/">Terms of use</a></li>
+        </ul>
+      </section>
+    </article>
+  </Container>
+</PageLayout>
