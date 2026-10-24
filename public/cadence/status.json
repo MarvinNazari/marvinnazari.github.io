@@ -1,6 +1,6 @@
 {
-  "minimumBuild": 0,
-  "latestBuild": 0,
+  "minimumVersion": "0",
+  "latestVersion": "0",
   "paused": false,
   "message": null,
   "updateURL": null
