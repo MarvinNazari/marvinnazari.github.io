@@ -1,6 +1,6 @@
 *Last updated 27 October 2026.*
 
-Cadence is an app for iPhone and iPad that shows your training from [intervals.icu](https://intervals.icu). This page explains what happens to your data when you use it.
+Cadence is an app that shows your training from [intervals.icu](https://intervals.icu). This page explains what happens to your data when you use it.
 
 ## The short version
 

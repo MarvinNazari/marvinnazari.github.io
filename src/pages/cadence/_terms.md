@@ -1,6 +1,6 @@
 *Last updated 27 October 2026.*
 
-These terms apply when you use Cadence, an app for iPhone and iPad for your [intervals.icu](https://intervals.icu) training data. Apple's [standard licence agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/) applies too.
+These terms apply when you use Cadence, an app for your [intervals.icu](https://intervals.icu) training data. Apple's [standard licence agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/) applies too.
 
 ## Using Cadence
 
