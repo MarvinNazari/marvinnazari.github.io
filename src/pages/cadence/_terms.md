@@ -1,10 +1,10 @@
-*Last updated 1 October 2026.*
+*Last updated 27 October 2026.*
 
 These terms apply when you use Cadence, an iPhone app for your [intervals.icu](https://intervals.icu) training data. Apple's [standard licence agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/) applies too.
 
 ## Using Cadence
 
-During the beta, Cadence is a free test version distributed through TestFlight: features may change, break or be removed.
+Cadence is free. Its features may change or be removed over time, and test versions distributed through TestFlight may not work as expected.
 
 ## intervals.icu
 
