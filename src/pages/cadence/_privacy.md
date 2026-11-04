@@ -12,7 +12,7 @@ Your training data goes straight between your iPhone and intervals.icu, and to n
 - **Your sign-in.** Your intervals.icu API key, or the token from signing in with intervals.icu, is kept in the iOS Keychain on your iPhone. It is sent only to intervals.icu, to identify you.
 - **A copy on your iPhone.** To open quickly and to feed the widgets, Cadence keeps recent data on your iPhone, inside the app and its widgets' shared storage. Signing out removes your sign-in and this copy.
 - **A diagnostics log.** Cadence keeps a diagnostics log on your device for seven days. It holds no keys, tokens, email addresses, or activity names or notes, and it leaves your device only if you share it from Support › Share diagnostics, or send it with a feedback mail. Signing out leaves it, so it can show what happened if you were signed out unexpectedly.
-- **Error reports.** When Cadence can't read a response from intervals.icu, it sends a report to TelemetryDeck: which request and field failed, why, and the app build. A report holds no training data, name, email or key. Each launch uses a new random ID, kept only in memory, so reports can't be tied to each other or to you. This is on by default; you can turn it off in Profile › Settings › Share error reports.
+- **Error reports.** When Cadence can't read a response from intervals.icu, it sends a report to TelemetryDeck: which request and field failed, why, and the app build. A report holds no training data, name, email or key. Each launch uses a new random ID, kept only in memory, so reports from different launches can't be tied together, or to you. This is on by default; you can turn it off in Profile › Settings › Share error reports.
 
 ## What Cadence does not do
 
