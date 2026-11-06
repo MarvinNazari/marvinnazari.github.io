@@ -1,4 +1,4 @@
-*Last updated 4 November 2026.*
+*Last updated 6 November 2026.*
 
 Cadence is an iPhone app that shows your training from [intervals.icu](https://intervals.icu). This page explains what happens to your data when you use it.
 
@@ -23,15 +23,15 @@ Your training data goes straight between your iPhone and intervals.icu, and to n
 ## Other services involved
 
 - **intervals.icu** stores your training data. Its own [privacy policy](https://www.intervals.icu/privacy-policy/) and terms apply to it. Cadence is an independent app and is not made by intervals.icu.
-- **wavio.co**, the developer's site. Cadence checks a small status file there to learn whether the app is paused or needs an update. That request carries no account data. Like any website, the site's host (GitHub Pages) sees your IP address and the time of the request.
+- **wavio.co**, the developer's site. Cadence checks a small status file there to learn whether the app is paused or needs an update, and a list of public plans and authors removed from Cadence after a report. Those requests carry no account data. Like any website, the site's host (GitHub Pages) sees your IP address and the time of the request.
 - **TelemetryDeck** receives the error reports described above. Like any web request, a report reaches its servers from your IP address. Its own [privacy policy](https://telemetrydeck.com/privacy/) applies to it.
 - **Apple Maps** draws the maps for activities and race courses. To do that, your iPhone loads map tiles from Apple. Cadence does not send Apple your activities. If you choose Open in Maps, the place you opened, such as a race venue, is handed to Apple Maps.
 - **Apple** may share crash reports with the developer if you agreed to that in your iPhone's settings or in TestFlight. Apple handles these under its own privacy policy.
-- **Email.** If you choose Send feedback, your mail app opens a draft to the developer. The draft includes the app version, iOS version and iPhone model, with this week's diagnostics log attached. You can edit the draft or remove the log before sending.
+- **Email.** If you choose Send feedback, your mail app opens a draft to the developer. The draft includes the app version, iOS version and iPhone model, with this week's diagnostics log attached. You can edit the draft or remove the log before sending. If you report a public plan or folder, the draft names it and its author, with no log attached.
 
 ## How long data is kept
 
-Your training data stays on intervals.icu, which is where it lives. The copy on your iPhone is removed when you sign out or delete the app. The diagnostics log keeps seven days and is removed when you delete the app. Error reports stay with TelemetryDeck and may be kept for years; they can't be traced to you, so they can't be deleted one by one. Emails you send are kept only as long as they are needed to answer you, and you can ask for them to be deleted.
+Your training data stays on intervals.icu, which is where it lives. The copy on your iPhone is removed when you sign out or delete the app. Authors you block and items you report are remembered on your iPhone, and never sent anywhere, until you undo that in Settings or delete the app. The diagnostics log keeps seven days and is removed when you delete the app. Error reports stay with TelemetryDeck and may be kept for years; they can't be traced to you, so they can't be deleted one by one. Emails you send are kept only as long as they are needed to answer you, and you can ask for them to be deleted.
 
 ## Your choices
 
