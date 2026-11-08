@@ -1,20 +1,144 @@
 ---
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
+
+// Each feature: its words and its clip (public/cadence/clips/<clip>.mp4 and .jpg).
+// The clips are made in the cadence-video repo from the app on a test account.
+const features = [
+  {
+    clip: "today",
+    title: "Today, on one screen",
+    text: "Your Fitness, Fatigue and Form, today's sessions with their steps, and your week day by day with the phase of your plan.",
+    where: "The Today tab",
+    label: "Today's form gauge, sessions and week lifting out of the screen one by one",
+  },
+  {
+    clip: "calendar",
+    title: "Your week, day by day",
+    text: "Drag a session to another day, add a workout or a note, and mark days when you're sick or away. The sessions those days miss wait for you to move them.",
+    where: "Today › This week",
+    label: "A session dragged to Friday, a sick entry turning two days' sessions into missed ones, and a note added from the Add menu",
+  },
+  {
+    clip: "builder",
+    title: "Build a workout",
+    text: "Add steps and repeats, and set each one's length and target in power, heart rate or pace. Save, and the workout's steps are ready for your calendar and your watch.",
+    where: "Profile › Library › a workout › Edit",
+    label: "The repeat in a sweet spot workout goes from 3 to 5, and two intervals grow into its steps chart",
+  },
+  {
+    clip: "plan",
+    title: "Your plan, phase by phase",
+    text: "Your intervals.icu training plan, every week of it: the target, what you did, and your races. Touch a week to see how it went, and open each phase from base to taper.",
+    where: "Today › This week › the phase",
+    label: "From Today's phase chip into the plan: every week's bars, a touch on four weeks, on to race day, and the four phases",
+  },
+  {
+    clip: "streak",
+    title: "Weeks in a row",
+    text: "How many weeks in a row you've trained, and every day of the last months on one grid, deeper orange the more sessions it held.",
+    where: "Today › the flame",
+    label: "The streak sheet opening on a 24-week streak, then a wave across its training days as they count to 150",
+  },
+  {
+    clip: "insights",
+    title: "Your board, your way",
+    text: "Each sport's weeks, your streak, your plan and your bests, on one board. Move any card where you want it and make it bigger or smaller.",
+    where: "Insights",
+    label: "The Insights board, its Streak card moved and then resized",
+  },
+  {
+    clip: "widgets",
+    title: "On your Home Screen",
+    text: "Today, your streak, your next race and your totals for each sport, as widgets in every size, and on your Lock Screen.",
+    where: "Your Home Screen › Edit › Add Widget › Cadence",
+    label: "Cadence widgets added to a Home Screen, a page of other sizes and sports, then the Lock Screen",
+  },
+  {
+    clip: "activity",
+    title: "Activity in detail",
+    text: "Every interval and kilometre broken down, how hard it really was, and a page for your power: its curve and your best efforts against the last six weeks and all time.",
+    where: "Activities › an activity",
+    label: "A ride page, its breakdown by interval, its intensity, then the Power page with its curve and best efforts",
+  },
+  {
+    clip: "explore",
+    title: "Plans from other athletes",
+    text: "Browse public plans on intervals.icu by sport, weeks and hours, and add the ones you like to your library.",
+    where: "Profile › Library › Explore",
+    label: "Searching public plans, opening a 70.3 plan and adding it to the library",
+  },
+  {
+    clip: "watch",
+    title: "On your wrist",
+    text: "The week's planned workouts go to the Workout app on your Apple Watch by themselves, steps and targets included, ready to start.",
+    where: "Profile › Settings › Send to Apple Watch",
+    label: "A planned workout, then the same workout and its steps on Apple Watch",
+  },
+];
+
+const details = [
+  { still: "zones", title: "Zones", text: "Heart rate, power and pace zones as set in intervals.icu." },
+  { still: "gear", title: "Gear", text: "Distance on every bike and pair of shoes, and when to replace them." },
+  { still: "bests", title: "Best efforts", text: "Your best power and pace, this ride against the last six weeks and all time." },
+  { still: "targets", title: "Weekly targets", text: "Each sport's hours and distance against this week's targets." },
+];
 ---
 
-<PageLayout title="Cadence" description="Cadence is an iPhone app for your intervals.icu training: your week, your plan, your activities and how your fitness is going.">
+<PageLayout title="Cadence" description="Cadence is an iPhone app for your intervals.icu training: today's workout, your week, your plan and your form, every number straight from intervals.icu.">
   <Container>
-    <article class="space-y-10">
+    <article class="space-y-16">
       <div class="space-y-3">
         <h1 class="animate font-semibold text-black dark:text-white text-2xl not-prose">Cadence</h1>
-        <p class="animate">An iPhone app for your <a href="https://intervals.icu">intervals.icu</a> training: your week, your plan, your activities and how your fitness is going. Cadence talks to your intervals.icu account directly from your iPhone; there is no Cadence account and no server in between.</p>
-        <p class="animate text-sm opacity-75">Cadence is in beta on TestFlight. It is an independent app, not made by intervals.icu.</p>
+        <p class="animate">An iPhone app for your <a href="https://intervals.icu">intervals.icu</a> training: today's workout, your week, your plan and your form. Every number comes straight from your intervals.icu account; there is no Cadence account and no server in between.</p>
+        <p class="animate font-sans text-sm"><a href="https://apps.apple.com/app/id6811872692">Download on the App Store</a> · For iPhone, with an intervals.icu account</p>
       </div>
+
+      {features.map((feature, index) => (
+        <section class="animate space-y-3" id={feature.clip}>
+          <h2 class="font-semibold text-black dark:text-white">{feature.title}</h2>
+          <p>{feature.text}</p>
+          <p class="font-sans text-sm opacity-75">{feature.where}</p>
+          <div class="not-prose mx-auto mt-4 w-full max-w-[520px] aspect-[4/5] overflow-hidden rounded-2xl bg-black">
+            <video
+              class="block size-full"
+              src={`/cadence/clips/${feature.clip}.mp4`}
+              poster={`/cadence/clips/${feature.clip}.jpg`}
+              autoplay
+              muted
+              loop
+              playsinline
+              preload={index < 2 ? "auto" : "none"}
+              aria-label={feature.label}
+            ></video>
+          </div>
+        </section>
+      ))}
+
+      <section class="animate space-y-3">
+        <h2 class="font-semibold text-black dark:text-white">And the details</h2>
+        <div class="not-prose grid grid-cols-2 gap-5">
+          {details.map((detail) => (
+            <div class="space-y-1.5">
+              <img
+                class="block w-full aspect-[402/874] rounded-xl bg-stone-200 dark:bg-stone-800"
+                src={`/cadence/stills/${detail.still}.jpg`}
+                alt={`Cadence: ${detail.title.toLowerCase()}`}
+                loading="lazy"
+              />
+              <h3 class="pt-1.5 font-semibold text-black dark:text-white">{detail.title}</h3>
+              <p class="font-serif text-sm leading-relaxed">{detail.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section class="animate space-y-3">
         <h2 class="font-semibold text-black dark:text-white">Support</h2>
         <p>Found a bug or have an idea? Email <a href="mailto:cadence@wavio.co?subject=Cadence%20feedback">cadence@wavio.co</a>, or use Send feedback in the app's Profile tab, which fills in your app and iOS version for you. For a bug, say what you did, what you expected and what happened; a screenshot helps.</p>
+        <p class="font-sans text-sm opacity-75">Cadence needs an intervals.icu account. It is an independent app, not made by intervals.icu.</p>
       </section>
+
       <section class="animate space-y-3">
         <h2 class="font-semibold text-black dark:text-white">Legal</h2>
         <ul class="list-disc pl-5 space-y-1">
@@ -25,3 +149,18 @@ import Container from "@components/Container.astro";
     </article>
   </Container>
 </PageLayout>
+
+<script>
+  // Clips further down load when they come near, so the page starts light.
+  const videos = document.querySelectorAll<HTMLVideoElement>("article video[preload='none']");
+  const near = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const video = entry.target as HTMLVideoElement;
+      video.preload = "auto";
+      video.play().catch(() => {});
+      near.unobserve(video);
+    }
+  }, { rootMargin: "400px 0px" });
+  videos.forEach((video) => near.observe(video));
+</script>
