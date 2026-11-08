@@ -7,7 +7,7 @@ dateEnd: "Current"
 
 Senior iOS developer at Framna, working across client products for some of Sweden's biggest brands. Beyond client work, I build internal tools, pitch to new clients, and co-organise Framna Sweden's iOS community, running events, coding sessions and knowledge-sharing initiatives. Based in Stockholm, Sweden.
 
-Client projects:
+Products:
 
 - **Klarahill**, Fullstack Developer, Oct 2026 – now. Fullstack development for Klarahill.
 - **Hemnet**, Senior iOS Developer, Aug 2025 – Sep 2026. Returned to Hemnet to join Team Buy, the product team behind the buyer side of the app.
