@@ -5,5 +5,8 @@ import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   site: "https://wavio.co",
+  redirects: {
+    "/projects/cadence": "/cadence/",
+  },
   integrations: [mdx(), sitemap(), tailwind()],
 });
