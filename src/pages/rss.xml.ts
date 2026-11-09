@@ -24,7 +24,7 @@ export async function GET(context: Context) {
       title: item.data.title,
       description: item.data.description,
       pubDate: item.data.date,
-      link: `/${item.collection}/${item.slug}/`,
+      link: ("url" in item.data && item.data.url) || `/${item.collection}/${item.slug}/`,
     })),
   });
 }

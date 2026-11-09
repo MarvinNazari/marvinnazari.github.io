@@ -28,6 +28,8 @@ const projects = defineCollection({
     date: z.coerce.date(),
     draft: z.boolean().optional(),
     demoURL: z.string().optional(),
+    // A project with its own page on the site links there instead of /projects/<slug>.
+    url: z.string().optional(),
     repoURL: z.string().optional()
   }),
 });
