@@ -1,6 +1,7 @@
 {
  "format": 1,
  "generated": "2026-11-12",
+ "revision": 1,
  "licence": "Exercise library by Wavio (https://wavio.co/cadence), CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Built on wger's exercise data (https://wger.de), CC BY-SA 4.0. Illustrations (frames) from open-exercise-illustrations (https://github.com/hitmanrepo/open-exercise-illustrations), CC0 1.0.",
  "exercises": [
   {"id":"1-2-kneeling-thoracic-rotation","name":"Half-Kneeling Thoracic Rotation","aliases":["1/2 Kneeling Thoracic Rotation","Gentle Thoracic Rotation","Half-Kneeling T-Spine Rotation"],"category":"abs","muscles":["obliques"],"secondary":["chest","lats"],"equipment":["bodyweight"],"variation_group":"thoracic-rotation","measure":"reps","per_side":true,"pattern":"mobility","level":"beginner","alternatives":["open-book","quadruped-thoracic-rotation"],"how_to":"**Setup.** Kneel on one knee with the other foot flat in front of you, both knees bent to right angles. Reach both arms straight out in front at shoulder height, palms together.\n\n**Movement.** Open the arm on the side of your front leg out and back, turning your chest and eyes with it until the arm points behind you, then bring it back to meet the other hand. Do every rep on one side, then switch.\n\n**Keep steady.** Your hips facing forward and your front knee over your foot."},
