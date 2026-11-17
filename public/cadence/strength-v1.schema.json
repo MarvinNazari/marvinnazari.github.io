@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wavio.co/cadence/strength-v1.schema.json",
   "title": "Cadence strength workout, version 1",
-  "description": "A strength workout as Cadence stores it on intervals.icu: planned, in a comment in the event's description; done, in the activity's CadenceStrength field. Weights are kilograms, times seconds, distances metres. Within version 1 new keys and set types may appear; a reader keeps what it doesn't know. Spec: https://wavio.co/cadence/strength-format/",
+  "description": "A strength workout as Cadence stores it on intervals.icu: planned, in a comment in the event's description; done, in the activity's CadenceStrength field. Weights are kilograms, times seconds, distances metres. Within version 1 new keys and set types may be added; a reader keeps what it doesn't know, and a writer writes only what this schema lists. Spec: https://wavio.co/cadence/strength-format/",
   "type": "object",
   "required": ["cadence", "v", "exercises"],
   "properties": {
@@ -48,6 +48,7 @@
           }
         },
         "measure": {
+          "type": "string",
           "description": "What a set records. Take it from the library's exercise.",
           "enum": [
             "weight_reps",
@@ -100,8 +101,8 @@
       "properties": {
         "type": {
           "type": "string",
-          "examples": ["warmup"],
-          "description": "What kind of set; left out for a working set. Cadence knows \"warmup\". More types may come within version 1: a reader that doesn't know one treats the set as a working set and keeps the value."
+          "enum": ["warmup"],
+          "description": "A warm-up set; left out for a working set. Write only the types listed here. Readers treat a type they don't know as a working set and keep it, so later types (drop sets, sets to failure) can be added within version 1."
         },
         "reps": {
           "type": "integer",

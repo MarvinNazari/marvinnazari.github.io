@@ -45,7 +45,7 @@ Each exercise:
 | Key | Type | |
 | --- | --- | --- |
 | `exercise` | object | Required. `id` and `name`, see Exercises below. |
-| `measure` | string | Required. What a set records, see Measures below. |
+| `measure` | one of 8 | Required. What a set records: `weight_reps`, `assisted_reps`, `weighted_reps`, `reps`, `time`, `weight_time`, `distance_time` or `weight_distance`, see Measures below. |
 | `sets` | array | Required. |
 | `per_side` | `true` | Each side counts on its own: 8 reps is 8 a side. Leave it out otherwise. |
 | `implements` | `2` | Two dumbbells, kettlebells or cable stacks at once. A set's `kg` is then one of them. Leave it out for one. |
@@ -58,7 +58,7 @@ Each set:
 
 | Key | Type | |
 | --- | --- | --- |
-| `type` | string | `"warmup"` for a warm-up set. Leave it out for a working set. More types may come, see Versions. |
+| `type` | `"warmup"` | A warm-up set. Leave it out for a working set. Only the types listed here; more may come, see Versions. |
 | `reps` | integer | |
 | `reps_max` | integer | The top of a rep range. |
 | `seconds` | integer | |
@@ -155,7 +155,7 @@ The schema can also be given to a model as a tool's input or for structured outp
 
 Cadence reads version 1 and will keep reading it.
 
-Within version 1, new keys and new set types may appear. A reader that doesn't know a key ignores it and keeps it when it saves. A reader that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). Drop sets and sets to failure will come this way.
+Within version 1, new keys and new set types may be added. A writer uses only what this page and the schema list, so a typo fails the schema check. A reader that doesn't know a key ignores it and keeps it when it saves, and one that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). That way drop sets and sets to failure can come without locking out an older Cadence.
 
 A change that an older reader would get wrong gets a new `v`, for example a new measure or a change to what a number means. Cadence leaves a version it can't read untouched. Write version 1 as long as it can say what you need, so every Cadence can read it.
 
