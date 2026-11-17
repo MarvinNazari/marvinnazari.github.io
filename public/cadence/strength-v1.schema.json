@@ -3,53 +3,149 @@
   "$id": "https://wavio.co/cadence/strength-v1.schema.json",
   "title": "Cadence strength workout, version 1",
   "description": "A strength workout as Cadence stores it on intervals.icu: planned, in a comment in the event's description; done, in the activity's CadenceStrength field. Weights are kilograms, times seconds, distances metres. Within version 1 new keys and set types may be added; a reader keeps what it doesn't know, and a writer writes only what this schema lists. Spec: https://wavio.co/cadence/strength-format/",
+  "examples": [
+    {
+      "cadence": "strength",
+      "v": 1,
+      "exercises": [
+        {
+          "exercise": {
+            "id": "trap-bar-deadlift",
+            "name": "Deadlift (Trap Bar)"
+          },
+          "measure": "weight_reps",
+          "rest": 150,
+          "note": "Bar close to the legs.",
+          "sets": [
+            {
+              "type": "warmup",
+              "reps": 8,
+              "kg": 40
+            },
+            {
+              "reps": 5,
+              "kg": 60
+            },
+            {
+              "reps": 5,
+              "kg": 60
+            },
+            {
+              "reps": 5,
+              "kg": 60
+            }
+          ]
+        },
+        {
+          "exercise": {
+            "id": "benchpress-dumbbells",
+            "name": "Bench Press (Dumbbell)"
+          },
+          "measure": "weight_reps",
+          "implements": 2,
+          "rep_range": true,
+          "rest": 90,
+          "superset": "A",
+          "sets": [
+            {
+              "reps": 8,
+              "reps_max": 10,
+              "kg": 20
+            },
+            {
+              "reps": 8,
+              "reps_max": 10,
+              "kg": 20
+            }
+          ]
+        },
+        {
+          "exercise": {
+            "id": "pull-ups-on-machine",
+            "name": "Assisted Pull-Up (Machine)"
+          },
+          "measure": "assisted_reps",
+          "superset": "A",
+          "sets": [
+            {
+              "reps": 6,
+              "kg": 28
+            },
+            {
+              "reps": 6,
+              "kg": 28
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "type": "object",
-  "required": ["cadence", "v", "exercises"],
+  "required": [
+    "cadence",
+    "v",
+    "exercises"
+  ],
   "properties": {
     "cadence": {
       "const": "strength",
-      "description": "Marks the JSON as Cadence's strength format."
+      "description": "Marks the JSON as Cadence's strength format"
     },
     "v": {
       "const": 1,
-      "description": "The format's version. Cadence reads version 1 only."
+      "description": "The format's version. Cadence reads version 1 only"
     },
     "exercises": {
       "type": "array",
-      "description": "The exercises in the order they are done.",
-      "items": { "$ref": "#/$defs/exercise" }
+      "description": "The exercises in the order they are done",
+      "items": {
+        "$ref": "#/$defs/exercise"
+      }
     },
     "bodyweight": {
       "type": "number",
       "exclusiveMinimum": 0,
-      "description": "Done sets only: the athlete's weight in kilograms that Weight lifted counted bodyweight sets with. Never in a plan."
+      "description": "Done sets only: the athlete's weight in kilograms that Weight lifted counted bodyweight sets with. Never in a plan",
+      "maximum": 1000
     }
   },
   "$defs": {
     "exercise": {
       "type": "object",
-      "required": ["exercise", "measure", "sets"],
+      "required": [
+        "exercise",
+        "measure",
+        "sets"
+      ],
       "properties": {
         "exercise": {
           "type": "object",
-          "description": "Which exercise: its id in Cadence's library (https://wavio.co/cadence/exercises.json) and its name. An id Cadence doesn't know shows by its name.",
-          "required": ["id", "name"],
+          "description": "Which exercise: its id in Cadence's library (https://wavio.co/cadence/exercises.json) and its name. An id Cadence doesn't know shows by its name",
+          "required": [
+            "id",
+            "name"
+          ],
           "properties": {
             "id": {
               "type": "string",
               "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-              "examples": ["trap-bar-deadlift", "barbell-bench-press"]
+              "examples": [
+                "trap-bar-deadlift",
+                "barbell-bench-press"
+              ]
             },
             "name": {
               "type": "string",
               "minLength": 1,
-              "examples": ["Deadlift (Trap Bar)"]
+              "examples": [
+                "Deadlift (Trap Bar)"
+              ]
             }
           }
         },
         "measure": {
           "type": "string",
-          "description": "What a set records. Take it from the library's exercise.",
+          "description": "What a set records. Take it from the library's exercise",
           "enum": [
             "weight_reps",
             "assisted_reps",
@@ -63,68 +159,82 @@
         },
         "per_side": {
           "type": "boolean",
-          "description": "Each side is counted on its own: 8 reps is 8 a side. Left out when false."
+          "description": "Each side is counted on its own: 8 reps is 8 a side. Left out when false"
         },
         "implements": {
           "type": "integer",
           "minimum": 1,
-          "description": "2 when two dumbbells, kettlebells or cable stacks are used at once; a set's kg is then one of them. Left out when 1."
+          "description": "2 when two dumbbells, kettlebells or cable stacks are used at once; a set's kg is then one of them. Left out when 1",
+          "maximum": 10
         },
         "rep_range": {
           "type": "boolean",
-          "description": "The reps are a range, reps to reps_max. Left out when false."
+          "description": "The reps are a range, reps to reps_max. Left out when false"
         },
         "rest": {
           "type": "integer",
           "minimum": 0,
-          "description": "Seconds of rest after each set. In a superset, after each round."
+          "description": "Seconds of rest after each set. In a superset, after each round",
+          "maximum": 86400
         },
         "superset": {
           "type": "string",
           "minLength": 1,
-          "examples": ["A", "B"],
-          "description": "A superset's letter, from A. Exercises next to each other with the same letter are done in turn, one set of each per round."
+          "examples": [
+            "A",
+            "B"
+          ],
+          "description": "A superset's letter, from A. Exercises next to each other with the same letter are done in turn, one set of each per round"
         },
         "note": {
           "type": "string",
-          "description": "A note for the athlete, shown under the exercise."
+          "description": "A note for the athlete, shown under the exercise"
         },
         "sets": {
           "type": "array",
-          "items": { "$ref": "#/$defs/set" }
+          "items": {
+            "$ref": "#/$defs/set"
+          }
         }
       }
     },
     "set": {
       "type": "object",
-      "description": "One set. Which numbers it has follows the exercise's measure; a working set leaves type out.",
+      "description": "One set. Which numbers it has follows the exercise's measure; a working set leaves type out",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["warmup"],
-          "description": "A warm-up set; left out for a working set. Write only the types listed here. Readers treat a type they don't know as a working set and keep it, so later types (drop sets, sets to failure) can be added within version 1."
+          "enum": [
+            "warmup"
+          ],
+          "description": "A warm-up set; left out for a working set. Write only the types listed here. Readers treat a type they don't know as a working set and keep it, so later types (drop sets, sets to failure) can be added within version 1"
         },
         "reps": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 10000
         },
         "reps_max": {
           "type": "integer",
           "minimum": 0,
-          "description": "The top of a rep range; reps is the bottom."
+          "description": "The top of a rep range; reps is the bottom",
+          "maximum": 10000
         },
         "seconds": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 86400
         },
         "meters": {
           "type": "number",
-          "minimum": 0
+          "minimum": 0,
+          "maximum": 100000
         },
         "kg": {
           "type": "number",
           "minimum": 0,
-          "description": "Always positive. The measure says whether it is lifted (weight_*), added to the body (weighted_reps) or taken off it (assisted_reps)."
+          "description": "Always positive. The measure says whether it is lifted (weight_*), added to the body (weighted_reps) or taken off it (assisted_reps)",
+          "maximum": 10000
         }
       }
     }
