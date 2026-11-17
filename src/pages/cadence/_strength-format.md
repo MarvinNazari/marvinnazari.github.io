@@ -2,7 +2,7 @@
 
 Cadence keeps strength workouts in intervals.icu, with no server of its own. A planned workout is stored in the event's description, and the sets you did are stored on the activity. Both use the same JSON, described here so other tools can read and write it.
 
-The JSON Schema is at [wavio.co/cadence/strength-v1.schema.json](/cadence/strength-v1.schema.json).
+The JSON Schema is at [wavio.co/cadence/strength-v1.schema.json](/cadence/strength-v1.schema.json). For language models and scripts, this page is also plain Markdown at [strength-format.md](/cadence/strength-format.md), and the exercises are listed one per line at [exercises.txt](/cadence/exercises.txt).
 
 ## Planned workouts
 
@@ -14,7 +14,7 @@ Workout B. Keep the carries heavy.
 <!-- cadence-strength: {"cadence":"strength","exercises":[…],"v":1} -->
 ```
 
-- The JSON is on one line. Write `<` and `>` inside it as `<` and `>`, so a name or note can't close the comment.
+- The JSON is on one line. Write `<` and `>` inside it as `\u003c` and `\u003e`, so a name or note can't close the comment.
 - Cadence reads the last `cadence-strength` comment. Everything outside comments is the notes. Other comments are kept as they are.
 - intervals.icu keeps the comment as written and makes no workout steps from it. Both the website and Cadence hide it, so you only see the notes.
 
@@ -58,7 +58,7 @@ Each set:
 
 | Key | Type | |
 | --- | --- | --- |
-| `type` | `"warmup"` | A warm-up set. Leave it out for a working set. |
+| `type` | string | `"warmup"` for a warm-up set. Leave it out for a working set. More types may come, see Versions. |
 | `reps` | integer | |
 | `reps_max` | integer | The top of a rep range. |
 | `seconds` | integer | |
@@ -139,8 +139,24 @@ A warm-up and three sets of trap bar deadlifts with a 2½ minute rest, then dumb
 }
 ```
 
+## Writing a planned session
+
+The steps a script or a language model follows to add a workout Cadence can show:
+
+1. Pick each exercise from [exercises.txt](/cadence/exercises.txt): its id, name and measure, and `per_side` or `implements` where the line has them. Use only ids from the list.
+2. Give each set the numbers its measure needs, in kilograms, seconds and metres.
+3. Write the JSON on one line and check it against the [schema](/cadence/strength-v1.schema.json). Write `<` and `>` as `\u003c` and `\u003e`.
+4. Put it after the notes: `<!-- cadence-strength: {…} -->`.
+5. Create the event with `"category": "WORKOUT"`, `"type": "WeightTraining"`, its date in `start_date_local`, a `name`, and that `description`.
+
+The schema can also be given to a model as a tool's input or for structured output. Use a provider's non-strict mode: strict modes require every key and forbid others, and this format has optional keys and lets others be added.
+
 ## Versions
 
-Cadence reads version 1 and will keep reading it. A key Cadence doesn't know is kept when it saves, so other tools can add their own. A change that an older Cadence couldn't read gets a new `v`, and Cadence leaves a version it can't read untouched.
+Cadence reads version 1 and will keep reading it.
+
+Within version 1, new keys and new set types may appear. A reader that doesn't know a key ignores it and keeps it when it saves. A reader that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). Drop sets and sets to failure will come this way.
+
+A change that an older reader would get wrong gets a new `v`, for example a new measure or a change to what a number means. Cadence leaves a version it can't read untouched. Write version 1 as long as it can say what you need, so every Cadence can read it.
 
 Questions or a format you'd like Cadence to read: [cadence@wavio.co](mailto:cadence@wavio.co).
