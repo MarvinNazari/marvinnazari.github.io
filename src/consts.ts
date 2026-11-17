@@ -9,7 +9,7 @@ export const SITE: Site = {
 };
 
 export const HOME: Metadata = {
-  TITLE: "Home",
+  TITLE: "Marvin Nazari",
   DESCRIPTION: "Marvin Nazari's personal website - work history, projects, and blog.",
 };
 
