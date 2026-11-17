@@ -1,0 +1,16 @@
+# wavio.co
+
+> Marvin Nazari's site. It hosts Cadence, an iPhone app for intervals.icu, and the formats other tools can use with it.
+
+## Cadence strength workouts
+
+Cadence keeps strength workouts in intervals.icu: a planned workout as JSON in a comment in the event's description, the done sets in the activity's CadenceStrength field.
+
+- [Strength format](https://wavio.co/cadence/strength-format.md): where the JSON lives, every key, the measures, an example, and the steps to write a planned session
+- [JSON Schema, version 1](https://wavio.co/cadence/strength-v1.schema.json): for checking a plan, or as a tool's input schema
+- [Exercises](https://wavio.co/cadence/exercises.txt): every exercise's id, name, category and measure, one per line
+
+## Optional
+
+- [Exercise library, full](https://wavio.co/cadence/exercises.json): how-tos, muscles, equipment and alternatives, about 700 KB
+- [Cadence](https://wavio.co/cadence/): the app
