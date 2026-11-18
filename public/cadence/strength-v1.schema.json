@@ -384,9 +384,11 @@
         "type": {
           "type": "string",
           "enum": [
-            "warmup"
+            "warmup",
+            "drop",
+            "failure"
           ],
-          "description": "A warm-up set; left out for a working set. Write only the types listed here. Readers treat a type they don't know as a working set and keep it, so later types (drop sets, sets to failure) can be added within version 1"
+          "description": "What kind of set; left out for a normal working set. warmup: a warm-up, not counted with the working sets. drop: a drop set, the weight dropped and done straight after the set before, without rest. failure: a set taken to failure. Drop sets and sets to failure are working sets. Write only the types listed here. Readers treat a type they don't know as a working set and keep it, so more types can be added within version 1"
         },
         "reps": {
           "type": "integer",
