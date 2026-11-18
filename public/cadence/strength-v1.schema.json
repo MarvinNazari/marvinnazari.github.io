@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wavio.co/cadence/strength-v1.schema.json",
   "title": "Cadence strength workout, version 1",
-  "description": "A strength workout as Cadence stores it on intervals.icu: planned, in a comment in the event's description; done, in the activity's CadenceStrength field. Weights are kilograms, times seconds, distances metres. Within version 1 new keys and set types may be added; a reader keeps what it doesn't know, and a writer writes only what this schema lists. Spec: https://wavio.co/cadence/strength-format/",
+  "description": "A strength workout as Cadence stores it on intervals.icu: planned, in a comment in the event's description (#/$defs/plan); done, in the activity's CadenceStrength field (#/$defs/done). This root accepts either; to write or check one kind, use its definition. Weights are kilograms, times seconds, distances metres. Within version 1 new keys and set types may be added; a reader keeps what it doesn't know, and a writer writes only what this schema lists. Spec: https://wavio.co/cadence/strength-format/",
   "examples": [
     {
       "cadence": "strength",
@@ -78,15 +78,145 @@
           ]
         }
       ]
+    },
+    {
+      "cadence": "strength",
+      "v": 1,
+      "bodyweight": 69.9,
+      "started_at": "2026-11-17T18:02:11Z",
+      "exercises": [
+        {
+          "exercise": {
+            "id": "trap-bar-deadlift",
+            "name": "Deadlift (Trap Bar)"
+          },
+          "measure": "weight_reps",
+          "note": "Grip slipped on the last set.",
+          "sets": [
+            {
+              "type": "warmup",
+              "reps": 8,
+              "kg": 40,
+              "done_at": 95,
+              "rest_end_at": 180
+            },
+            {
+              "reps": 5,
+              "kg": 60,
+              "done_at": 262,
+              "rest_end_at": 412
+            },
+            {
+              "reps": 5,
+              "kg": 60,
+              "done_at": 480,
+              "rest_end_at": 630
+            },
+            {
+              "reps": 4,
+              "kg": 60,
+              "done_at": 701
+            }
+          ]
+        },
+        {
+          "exercise": {
+            "id": "pull-ups-on-machine",
+            "name": "Assisted Pull-Up (Machine)"
+          },
+          "measure": "assisted_reps",
+          "sets": [
+            {
+              "reps": 6,
+              "kg": 28,
+              "done_at": 840,
+              "rest_end_at": 930
+            },
+            {
+              "reps": 6,
+              "kg": 28,
+              "done_at": 1004
+            }
+          ]
+        }
+      ]
     }
   ],
-  "type": "object",
-  "required": [
-    "cadence",
-    "v",
-    "exercises"
+  "anyOf": [
+    {
+      "$ref": "#/$defs/plan"
+    },
+    {
+      "$ref": "#/$defs/done"
+    }
   ],
-  "properties": {
+  "$defs": {
+    "plan": {
+      "title": "A planned workout",
+      "description": "What the comment in an event's description holds: the exercises to do, with their rests, rep ranges and notes. It has none of the done sets' keys",
+      "type": "object",
+      "required": [
+        "cadence",
+        "v",
+        "exercises"
+      ],
+      "properties": {
+        "cadence": {
+          "$ref": "#/$defs/cadence"
+        },
+        "v": {
+          "$ref": "#/$defs/v"
+        },
+        "exercises": {
+          "type": "array",
+          "description": "The exercises in the order they are done",
+          "items": {
+            "$ref": "#/$defs/plannedExercise"
+          }
+        },
+        "bodyweight": false,
+        "started_at": false
+      }
+    },
+    "done": {
+      "title": "Done sets",
+      "description": "What an activity's CadenceStrength field holds: the sets that were done, and for a session logged live, when. It has none of a plan's rests or rep ranges",
+      "type": "object",
+      "required": [
+        "cadence",
+        "v",
+        "exercises"
+      ],
+      "properties": {
+        "cadence": {
+          "$ref": "#/$defs/cadence"
+        },
+        "v": {
+          "$ref": "#/$defs/v"
+        },
+        "exercises": {
+          "type": "array",
+          "description": "The exercises that had a set done, in the order they were done",
+          "items": {
+            "$ref": "#/$defs/doneExercise"
+          }
+        },
+        "bodyweight": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "The athlete's weight in kilograms that Weight lifted counted bodyweight sets with. Left out when no bodyweight set counted",
+          "maximum": 1000
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Logged live only: when the session started, ISO 8601 in UTC",
+          "examples": [
+            "2026-11-17T18:02:11Z"
+          ]
+        }
+      }
+    },
     "cadence": {
       "const": "strength",
       "description": "Marks the JSON as Cadence's strength format"
@@ -95,35 +225,57 @@
       "const": 1,
       "description": "The format's version. Cadence reads version 1 only"
     },
-    "exercises": {
-      "type": "array",
-      "description": "The exercises in the order they are done",
-      "items": {
-        "$ref": "#/$defs/exercise"
+    "plannedExercise": {
+      "description": "An exercise of a plan",
+      "$ref": "#/$defs/exercise",
+      "type": "object",
+      "required": [
+        "sets"
+      ],
+      "properties": {
+        "rep_range": {
+          "type": "boolean",
+          "description": "The reps are a range, reps to reps_max. Left out when false"
+        },
+        "rest": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Seconds of rest after each set. In a superset, after each round",
+          "maximum": 86400
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plannedSet"
+          }
+        }
       }
     },
-    "bodyweight": {
-      "type": "number",
-      "exclusiveMinimum": 0,
-      "description": "Done sets only: the athlete's weight in kilograms that Weight lifted counted bodyweight sets with. Never in a plan",
-      "maximum": 1000
+    "doneExercise": {
+      "description": "An exercise as done",
+      "$ref": "#/$defs/exercise",
+      "type": "object",
+      "required": [
+        "sets"
+      ],
+      "properties": {
+        "rep_range": false,
+        "rest": false,
+        "sets": {
+          "type": "array",
+          "description": "The sets that were done",
+          "items": {
+            "$ref": "#/$defs/doneSet"
+          }
+        }
+      }
     },
-    "started_at": {
-      "type": "string",
-      "format": "date-time",
-      "description": "Done sets logged live only: when the session started, ISO 8601 in UTC",
-      "examples": [
-        "2026-11-17T18:02:11Z"
-      ]
-    }
-  },
-  "$defs": {
     "exercise": {
+      "description": "What a planned exercise and a done one share",
       "type": "object",
       "required": [
         "exercise",
-        "measure",
-        "sets"
+        "measure"
       ],
       "properties": {
         "exercise": {
@@ -175,16 +327,6 @@
           "description": "2 when two dumbbells, kettlebells or cable stacks are used at once; a set's kg is then one of them. Left out when 1",
           "maximum": 10
         },
-        "rep_range": {
-          "type": "boolean",
-          "description": "The reps are a range, reps to reps_max. Left out when false"
-        },
-        "rest": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Seconds of rest after each set. In a superset, after each round",
-          "maximum": 86400
-        },
         "superset": {
           "type": "string",
           "minLength": 1,
@@ -196,13 +338,42 @@
         },
         "note": {
           "type": "string",
-          "description": "A note for the athlete, shown under the exercise"
+          "description": "Shown under the exercise. In a plan, a note for the athlete; in done sets, what the athlete wrote while logging"
+        }
+      }
+    },
+    "plannedSet": {
+      "description": "A set to do",
+      "$ref": "#/$defs/set",
+      "type": "object",
+      "properties": {
+        "reps_max": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The top of a rep range; reps is the bottom",
+          "maximum": 10000
         },
-        "sets": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/set"
-          }
+        "done_at": false,
+        "rest_end_at": false
+      }
+    },
+    "doneSet": {
+      "description": "A set as done",
+      "$ref": "#/$defs/set",
+      "type": "object",
+      "properties": {
+        "reps_max": false,
+        "done_at": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400,
+          "description": "Logged live only: seconds from started_at when the set was ticked"
+        },
+        "rest_end_at": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400,
+          "description": "Logged live only: seconds from started_at when the rest after the set ended (its timer, Skip or the next set); left out when no rest ran"
         }
       }
     },
@@ -222,12 +393,6 @@
           "minimum": 0,
           "maximum": 10000
         },
-        "reps_max": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "The top of a rep range; reps is the bottom",
-          "maximum": 10000
-        },
         "seconds": {
           "type": "integer",
           "minimum": 0,
@@ -243,18 +408,6 @@
           "minimum": 0,
           "description": "Always positive. The measure says whether it is lifted (weight_*), added to the body (weighted_reps) or taken off it (assisted_reps)",
           "maximum": 10000
-        },
-        "done_at": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 86400,
-          "description": "Done sets logged live only: seconds from started_at when the set was ticked"
-        },
-        "rest_end_at": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 86400,
-          "description": "Done sets logged live only: seconds from started_at when the rest after the set ended (its timer, Skip or the next set); left out when no rest ran"
         }
       }
     }
