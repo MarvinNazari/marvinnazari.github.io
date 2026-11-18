@@ -1,8 +1,8 @@
 *Version 1. Last updated 18 November 2026.*
 
-Cadence keeps strength workouts in intervals.icu, with no server of its own. A planned workout is stored in the event's description, and the sets you did are stored on the activity. Both use the same JSON, described here so other tools can read and write it.
+Cadence keeps strength workouts in intervals.icu, with no server of its own. A planned workout is stored in the event's description, and the sets you did are stored on the activity. Both use the same JSON in two shapes, a plan and done sets, described here so other tools can read and write it.
 
-The JSON Schema is at [wavio.co/cadence/strength-v1.schema.json](/cadence/strength-v1.schema.json). For language models and scripts, this page is also plain Markdown at [strength-format.md](/cadence/strength-format.md), and the exercises are listed one per line at [exercises.txt](/cadence/exercises.txt).
+The JSON Schema is at [wavio.co/cadence/strength-v1.schema.json](/cadence/strength-v1.schema.json). It names the two shapes: `#/$defs/plan` for a planned workout and `#/$defs/done` for done sets. The schema itself accepts either. For language models and scripts, this page is also plain Markdown at [strength-format.md](/cadence/strength-format.md), and the exercises are listed one per line at [exercises.txt](/cadence/exercises.txt).
 
 ## Planned workouts
 
@@ -25,22 +25,26 @@ To add one through the API, create the event as usual (`POST /api/v1/athlete/{id
 When a session is finished or marked done, Cadence saves the sets on the activity in a custom activity field with the code `CadenceStrength`. The field is a text field that Cadence creates the first time (it shows as Strength under Customize › Activity Fields on the website). Its value is the same JSON as a plan, with a few differences:
 
 - It holds only the sets that were done. An exercise with no done sets is left out.
-- `rest` is left out for a session logged live.
+- It has none of the plan's own keys: no `rest`, no `rep_range` and no `reps_max`. A set's `reps` is what was done.
 - `bodyweight` is the athlete's weight in kilograms that Weight lifted counted bodyweight sets with. It's left out when no bodyweight set counted.
 - Notes are what the athlete wrote while logging, not the plan's notes.
 - A session logged live also says when things happened: `started_at` when it started, and on each set `done_at`, when it was ticked, and `rest_end_at`, when the rest after it ended. Both are seconds from `started_at`. Sets ticked within seconds of each other were ticked together, so their times don't say when each was done.
 
+A plan has none of these keys: no `bodyweight`, `started_at`, `done_at` or `rest_end_at`. Done sets saved without times, as Mark done saves them, fit both shapes.
+
 intervals.icu only keeps the field when the athlete has it, so a tool writing it should check for it first. `POST …/activities/manual` drops custom fields, so set it with a `PUT` on the activity afterwards.
 
 ## The JSON
+
+Keys marked plan only or done only belong to that shape, and its part of the schema refuses them in the other.
 
 | Key | Type | |
 | --- | --- | --- |
 | `cadence` | `"strength"` | Required. |
 | `v` | `1` | Required. The version. |
 | `exercises` | array | Required. In the order they're done. |
-| `bodyweight` | number | Done sets only, see above. |
-| `started_at` | string | Done sets logged live only: when the session started, ISO 8601 in UTC, such as `"2026-11-17T18:02:11Z"`. |
+| `bodyweight` | number | Done only, see above. |
+| `started_at` | string | Done only, logged live: when the session started, ISO 8601 in UTC, such as `"2026-11-17T18:02:11Z"`. |
 
 Each exercise:
 
@@ -51,10 +55,10 @@ Each exercise:
 | `sets` | array | Required. |
 | `per_side` | `true` | Each side counts on its own: 8 reps is 8 a side. Leave it out otherwise. |
 | `implements` | `2` | Two dumbbells, kettlebells or cable stacks at once. A set's `kg` is then one of them. Leave it out for one. |
-| `rep_range` | `true` | The reps are a range, `reps` to `reps_max`. Leave it out otherwise. |
-| `rest` | integer | Seconds of rest after each set. In a superset, after each round. |
+| `rep_range` | `true` | Plan only. The reps are a range, `reps` to `reps_max`. Leave it out otherwise. |
+| `rest` | integer | Plan only. Seconds of rest after each set. In a superset, after each round. |
 | `superset` | string | A letter, starting at `"A"`. Exercises next to each other with the same letter are done in turn, one set of each per round. |
-| `note` | string | Shown under the exercise. |
+| `note` | string | Shown under the exercise. In a plan, a note for the athlete; in done sets, what the athlete wrote while logging. |
 
 Each set:
 
@@ -62,12 +66,12 @@ Each set:
 | --- | --- | --- |
 | `type` | `"warmup"` | A warm-up set. Leave it out for a working set. Only the types listed here; more may come, see Versions. |
 | `reps` | integer | |
-| `reps_max` | integer | The top of a rep range. |
+| `reps_max` | integer | Plan only. The top of a rep range. |
 | `seconds` | integer | |
 | `meters` | number | |
 | `kg` | number | Always positive. The measure says whether it's lifted, added to the body or taken off it. |
-| `done_at` | integer | Done sets logged live only: seconds from `started_at` when the set was ticked. |
-| `rest_end_at` | integer | Done sets logged live only: seconds from `started_at` when the rest after the set ended, by its timer, Skip or the next set. Left out when no rest ran. |
+| `done_at` | integer | Done only, logged live: seconds from `started_at` when the set was ticked. |
+| `rest_end_at` | integer | Done only, logged live: seconds from `started_at` when the rest after the set ended, by its timer, Skip or the next set. Left out when no rest ran. |
 
 Leave out a key rather than writing `null`.
 
@@ -90,7 +94,7 @@ Exercises are named by their id in Cadence's exercise library, published at [wav
 
 ## Example
 
-A warm-up and three sets of trap bar deadlifts with a 2½ minute rest, then dumbbell bench press and assisted pull-ups as a superset:
+A plan: a warm-up and three sets of trap bar deadlifts with a 2½ minute rest, then dumbbell bench press and assisted pull-ups as a superset:
 
 ```json
 {
@@ -143,23 +147,61 @@ A warm-up and three sets of trap bar deadlifts with a 2½ minute rest, then dumb
 }
 ```
 
+And done sets from a session logged live, counted with a bodyweight of 69.9 kg: the deadlifts with the last set one rep short, then two sets of assisted pull-ups.
+
+```json
+{
+  "cadence": "strength",
+  "v": 1,
+  "bodyweight": 69.9,
+  "started_at": "2026-11-17T18:02:11Z",
+  "exercises": [
+    {
+      "exercise": {
+        "id": "trap-bar-deadlift",
+        "name": "Deadlift (Trap Bar)"
+      },
+      "measure": "weight_reps",
+      "note": "Grip slipped on the last set.",
+      "sets": [
+        { "type": "warmup", "reps": 8, "kg": 40, "done_at": 95, "rest_end_at": 180 },
+        { "reps": 5, "kg": 60, "done_at": 262, "rest_end_at": 412 },
+        { "reps": 5, "kg": 60, "done_at": 480, "rest_end_at": 630 },
+        { "reps": 4, "kg": 60, "done_at": 701 }
+      ]
+    },
+    {
+      "exercise": {
+        "id": "pull-ups-on-machine",
+        "name": "Assisted Pull-Up (Machine)"
+      },
+      "measure": "assisted_reps",
+      "sets": [
+        { "reps": 6, "kg": 28, "done_at": 840, "rest_end_at": 930 },
+        { "reps": 6, "kg": 28, "done_at": 1004 }
+      ]
+    }
+  ]
+}
+```
+
 ## Writing a planned session
 
 The steps a script or a language model follows to add a workout Cadence can show:
 
 1. Pick each exercise from [exercises.txt](/cadence/exercises.txt): its id, name and measure, and `per_side` or `implements` where the line has them. Use only ids from the list.
 2. Give each set the numbers its measure needs, in kilograms, seconds and metres.
-3. Write the JSON on one line and check it against the [schema](/cadence/strength-v1.schema.json). Write `<` and `>` as `\u003c` and `\u003e`.
+3. Write the JSON on one line and check it against the plan in the [schema](/cadence/strength-v1.schema.json), `#/$defs/plan`. Write `<` and `>` as `\u003c` and `\u003e`.
 4. Put it after the notes: `<!-- cadence-strength: {…} -->`.
 5. Create the event with `"category": "WORKOUT"`, `"type": "WeightTraining"`, its date in `start_date_local`, a `name`, and that `description`.
 
-The schema can also be given to a model as a tool's input or for structured output. Use a provider's non-strict mode: strict modes require every key and forbid others, and this format has optional keys and lets others be added.
+The schema can also be given to a model as a tool's input or for structured output: point it at `#/$defs/plan`, which has no done keys for the model to fill in. Use a provider's non-strict mode: strict modes require every key and forbid others, and this format has optional keys and lets others be added.
 
 ## Versions
 
 Cadence reads version 1 and will keep reading it.
 
-Within version 1, new keys and new set types may be added. A writer uses only what this page and the schema list, so a typo fails the schema check. A reader that doesn't know a key ignores it and keeps it when it saves, and one that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). That way drop sets and sets to failure can come without locking out an older Cadence.
+Within version 1, new keys and new set types may be added. A writer uses only what this page and the schema list. The schema allows keys it doesn't know, so it won't catch a misspelt key; check the names against this page. A reader that doesn't know a key ignores it and keeps it when it saves, and one that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). That way drop sets and sets to failure can come without locking out an older Cadence.
 
 A change that an older reader would get wrong gets a new `v`, for example a new measure or a change to what a number means. Cadence leaves a version it can't read untouched. Write version 1 as long as it can say what you need, so every Cadence can read it.
 
