@@ -201,7 +201,7 @@ The schema can also be given to a model as a tool's input or for structured outp
 
 Cadence reads version 1 and will keep reading it.
 
-Within version 1, new keys and new set types may be added. A writer uses only what this page and the schema list, so a typo fails the schema check. A reader that doesn't know a key ignores it and keeps it when it saves, and one that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). That way drop sets and sets to failure can come without locking out an older Cadence.
+Within version 1, new keys and new set types may be added. A writer uses only what this page and the schema list. The schema allows keys it doesn't know, so it won't catch a misspelt key; check the names against this page. A reader that doesn't know a key ignores it and keeps it when it saves, and one that doesn't know a set's `type` treats it as a working set and keeps the type (Cadence 1.2 and later). That way drop sets and sets to failure can come without locking out an older Cadence.
 
 A change that an older reader would get wrong gets a new `v`, for example a new measure or a change to what a number means. Cadence leaves a version it can't read untouched. Write version 1 as long as it can say what you need, so every Cadence can read it.
 
