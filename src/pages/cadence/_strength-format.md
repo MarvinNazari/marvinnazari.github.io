@@ -1,4 +1,4 @@
-*Version 1. Last updated 17 November 2026.*
+*Version 1. Last updated 18 November 2026.*
 
 Cadence keeps strength workouts in intervals.icu, with no server of its own. A planned workout is stored in the event's description, and the sets you did are stored on the activity. Both use the same JSON, described here so other tools can read and write it.
 
@@ -28,6 +28,7 @@ When a session is finished or marked done, Cadence saves the sets on the activit
 - `rest` is left out for a session logged live.
 - `bodyweight` is the athlete's weight in kilograms that Weight lifted counted bodyweight sets with. It's left out when no bodyweight set counted.
 - Notes are what the athlete wrote while logging, not the plan's notes.
+- A session logged live also says when things happened: `started_at` when it started, and on each set `done_at`, when it was ticked, and `rest_end_at`, when the rest after it ended. Both are seconds from `started_at`. Sets ticked within seconds of each other were ticked together, so their times don't say when each was done.
 
 intervals.icu only keeps the field when the athlete has it, so a tool writing it should check for it first. `POST …/activities/manual` drops custom fields, so set it with a `PUT` on the activity afterwards.
 
@@ -39,6 +40,7 @@ intervals.icu only keeps the field when the athlete has it, so a tool writing it
 | `v` | `1` | Required. The version. |
 | `exercises` | array | Required. In the order they're done. |
 | `bodyweight` | number | Done sets only, see above. |
+| `started_at` | string | Done sets logged live only: when the session started, ISO 8601 in UTC, such as `"2026-11-17T18:02:11Z"`. |
 
 Each exercise:
 
@@ -64,6 +66,8 @@ Each set:
 | `seconds` | integer | |
 | `meters` | number | |
 | `kg` | number | Always positive. The measure says whether it's lifted, added to the body or taken off it. |
+| `done_at` | integer | Done sets logged live only: seconds from `started_at` when the set was ticked. |
+| `rest_end_at` | integer | Done sets logged live only: seconds from `started_at` when the rest after the set ended, by its timer, Skip or the next set. Left out when no rest ran. |
 
 Leave out a key rather than writing `null`.
 

@@ -107,6 +107,14 @@
       "exclusiveMinimum": 0,
       "description": "Done sets only: the athlete's weight in kilograms that Weight lifted counted bodyweight sets with. Never in a plan",
       "maximum": 1000
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Done sets logged live only: when the session started, ISO 8601 in UTC",
+      "examples": [
+        "2026-11-17T18:02:11Z"
+      ]
     }
   },
   "$defs": {
@@ -235,6 +243,18 @@
           "minimum": 0,
           "description": "Always positive. The measure says whether it is lifted (weight_*), added to the body (weighted_reps) or taken off it (assisted_reps)",
           "maximum": 10000
+        },
+        "done_at": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400,
+          "description": "Done sets logged live only: seconds from started_at when the set was ticked"
+        },
+        "rest_end_at": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400,
+          "description": "Done sets logged live only: seconds from started_at when the rest after the set ended (its timer, Skip or the next set); left out when no rest ran"
         }
       }
     }
