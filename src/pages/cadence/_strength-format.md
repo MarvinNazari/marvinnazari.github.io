@@ -57,7 +57,7 @@ Each exercise:
 | `implements` | `2` | Two dumbbells, kettlebells or cable stacks at once. A set's `kg` is then one of them. Leave it out for one. |
 | `rep_range` | `true` | Plan only. The reps are a range, `reps` to `reps_max`. Leave it out otherwise. |
 | `rest` | integer | Plan only. Seconds of rest after each set. In a superset, after each round. None before a drop set, which follows straight away. |
-| `superset` | string | A letter, starting at `"A"`. Exercises next to each other with the same letter are done in turn, one set of each per round. |
+| `superset` | string | A letter, starting at `"A"`. Exercises next to each other with the same letter are done in turn, one set of each per round. A drop set goes in the round of the set before it, straight after it. |
 | `note` | string | Shown under the exercise. In a plan, a note for the athlete; in done sets, what the athlete wrote while logging. |
 
 Each set:

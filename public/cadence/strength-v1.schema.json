@@ -334,7 +334,7 @@
             "A",
             "B"
           ],
-          "description": "A superset's letter, from A. Exercises next to each other with the same letter are done in turn, one set of each per round"
+          "description": "A superset's letter, from A. Exercises next to each other with the same letter are done in turn, one set of each per round. A drop set goes in the round of the set before it, straight after it"
         },
         "note": {
           "type": "string",
